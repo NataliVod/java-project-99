@@ -1,9 +1,5 @@
 setup:
-	./gradlew wrapper --gradle-version 8.4
-	./gradlew build
-
-app:
-	./gradlew bootRun --args='--spring.profiles.active=dev'
+	gradle wrapper --gradle-version 8.4
 
 clean:
 	./gradlew clean
@@ -11,18 +7,34 @@ clean:
 build:
 	./gradlew clean build
 
-dev: app
+start:
+	./gradlew bootRun --args='--spring.profiles.active=dev'
 
-reload-classes:
-	./gradlew -t classes
+start-prod:
+	./gradlew bootRun --args='--spring.profiles.active=prod'
 
 install:
 	./gradlew installDist
 
+start-dist:
+	./build/install/app/bin/app
+
+lint:
+	./gradlew checkstyleMain checkstyleTest
+
 test:
 	./gradlew test
 
-check-java-deps:
-	./gradlew dependencyUpdates -Drevision=release
+report:
+	./gradlew jacocoTestReport
+
+check-updates:
+	./gradlew dependencyUpdates
+
+generate-migrations:
+	gradle diffChangeLog
+
+db-migrate:
+	./gradlew update
 
 .PHONY: build
