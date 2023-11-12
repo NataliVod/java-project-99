@@ -31,9 +31,6 @@ report:
 check-updates:
 	./gradlew dependencyUpdates
 
-generate-migrations:
-	gradle diffChangeLog
-
 db-migrate:
 	./gradlew update
 
