@@ -1,0 +1,21 @@
+server:
+  port: ${PORT:8080}
+
+base-url: /api
+
+spring:
+  application:
+    name: taskManager
+
+  profiles:
+    active: ${APP_ENV:development}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
+

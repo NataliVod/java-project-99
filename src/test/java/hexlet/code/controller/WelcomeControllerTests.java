@@ -1,4 +1,4 @@
-package hexlet.code;
+package hexlet.code.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-
 
 @SpringBootTest(properties = {
         "spring.datasource.initialize=false",
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 
 @AutoConfigureMockMvc
-class AppApplicationTests {
+class WelcomeControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
