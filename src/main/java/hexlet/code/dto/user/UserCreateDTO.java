@@ -11,6 +11,8 @@ import lombok.Setter;
 @Setter
 public class UserCreateDTO {
 
+    private Long id;
+
     @NotNull
     @Email
     private String email;
