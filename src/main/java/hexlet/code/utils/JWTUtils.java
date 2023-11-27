@@ -1,5 +1,6 @@
 package hexlet.code.utils;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -10,10 +11,11 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 @Component
+@AllArgsConstructor
 public class JWTUtils {
 
     @Autowired
-    private JwtEncoder encoder;
+    private final JwtEncoder encoder;
 
     public String generateToken(String username) {
         Instant now = Instant.now();
@@ -26,3 +28,4 @@ public class JWTUtils {
         return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 }
+
