@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService  {
+public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -25,7 +25,7 @@ public class UserService  {
         this.passwordEncoder = passwordEncoder;
     }
 
-      public List<UserDTO> getAll() {
+    public List<UserDTO> getAll() {
         var users = userRepository.findAll();
         var result = users.stream()
                 .map(userMapper::map)
@@ -53,7 +53,7 @@ public class UserService  {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User Not Found: " + id));
         userMapper.update(userData, user);
-        var hashedPassword = passwordEncoder.encode( user.getPassword());
+        var hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPasswordDigest(hashedPassword);
         userRepository.save(user);
         var userDTO = userMapper.map(user);
