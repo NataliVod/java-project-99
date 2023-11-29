@@ -38,7 +38,7 @@ public class SecurityConfig {
             throws Exception {
         var mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
         return http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(mvcMatcherBuilder.pattern("/api/login")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/welcome")).permitAll()
@@ -48,19 +48,36 @@ public class SecurityConfig {
                 .oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.decoder(jwtDecoder)))
                 .httpBasic(Customizer.withDefaults())
                 .build();
-    }
 
+    }
+/*
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
+            throws Exception {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeRequests()
+                .anyRequest().permitAll() // Разрешить доступ ко всем запросам
+                .and()
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.decoder(jwtDecoder)))
+                .httpBasic(Customizer.withDefaults())
                 .build();
     }
+*/
 
-    @Bean
-    public AuthenticationProvider daoAuthProvider(AuthenticationManagerBuilder auth) {
-        var provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userService);
-        provider.setPasswordEncoder(passwordEncoder);
-        return provider;
+
+        @Bean
+        public AuthenticationManager authenticationManager (HttpSecurity http) throws Exception {
+            return http.getSharedObject(AuthenticationManagerBuilder.class)
+                    .build();
+        }
+
+        @Bean
+        public AuthenticationProvider daoAuthProvider (AuthenticationManagerBuilder auth){
+            var provider = new DaoAuthenticationProvider();
+            provider.setUserDetailsService(userService);
+            provider.setPasswordEncoder(passwordEncoder);
+            return provider;
+        }
     }
-}

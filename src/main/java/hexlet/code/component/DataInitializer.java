@@ -7,17 +7,18 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
 public class DataInitializer implements ApplicationRunner {
 
-    @Autowired
     private final UserRepository userRepository;
 
-    @Autowired
     private final UserMapper userMapper;
+
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -25,7 +26,8 @@ public class DataInitializer implements ApplicationRunner {
         var userData = new UserCreateDTO();
         userData.setFirstName("hexlet");
         userData.setEmail("hexlet@example.com");
-        userData.setPassword("qwerty");
+        var hashedPassword = passwordEncoder.encode("qwerty");
+        userData.setPassword(hashedPassword);
         var user = userMapper.map(userData);
         userRepository.save(user);
 
