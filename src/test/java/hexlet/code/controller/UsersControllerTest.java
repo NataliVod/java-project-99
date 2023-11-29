@@ -7,6 +7,8 @@ import hexlet.code.repository.UserRepository;
 import hexlet.code.util.ModelGenerator;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import hexlet.code.utils.UserUtils;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,19 +41,25 @@ class UsersControllerTest {
     private UserMapper mapper;
 
     @Autowired
+    private UserUtils userUtils;
+
+    @Autowired
     private ModelGenerator modelGenerator;
+
+    private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
 
     private User testUser;
 
     @BeforeEach
     public void setUp() {
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
+        token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));
     }
 
     @Test
     public void testIndex() throws Exception {
         userRepository.save(testUser);
-        var result = mockMvc.perform(get("/api/users").with(jwt()))
+        var result = mockMvc.perform(get("/api/users").with(token))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -63,7 +72,7 @@ class UsersControllerTest {
 
         userRepository.save(testUser);
 
-        var request = get("/api/users/{id}", testUser.getId()).with(jwt());
+        var request = get("/api/users/{id}", testUser.getId()).with(token);
         var result = mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andReturn();
