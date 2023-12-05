@@ -1,12 +1,10 @@
 package hexlet.code.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 import java.util.Date;
 
@@ -14,19 +12,16 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class TaskStatusDTO {
 
     private Long id;
 
-    private String firstName;
+    @NotBlank
+    private String name;
 
-    private String lastName;
-
-    @NotNull
-    @Email
-    private String email;
+    @NotBlank
+    private String Slug;
 
     private Date createdAt;
 
-    private Date updatedAt;
 }

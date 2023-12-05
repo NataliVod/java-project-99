@@ -4,12 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -26,6 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -100,9 +96,17 @@ public class User implements UserDetails, BaseEntity {
         return true;
     }
 
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 
-    /*@JsonIgnore
-    @OneToMany(mappedBy = "author")
-    private List<Task> tasks;*/
+    public void addTask(Task task) {
+        tasks.add(task);
+        task.setAssignee(this);
+    }
+
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        task.setAssignee(null);
+    }
 
 }
