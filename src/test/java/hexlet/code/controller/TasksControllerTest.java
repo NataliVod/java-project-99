@@ -21,11 +21,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashMap;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -76,7 +79,7 @@ public class TasksControllerTest {
     @Test
     public void testIndex() throws Exception {
         taskRepository.save(testTask);
-        var result = mockMvc.perform(MockMvcRequestBuilders.get("/api/tasks"))
+        var result = mockMvc.perform(get("/api/tasks"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -89,7 +92,7 @@ public class TasksControllerTest {
 
         taskRepository.save(testTask);
 
-        var request = MockMvcRequestBuilders.get("/api/tasks/{id}", testTask.getId());
+        var request = get("/api/tasks/{id}", testTask.getId());
         var result = mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andReturn();
@@ -109,7 +112,7 @@ public class TasksControllerTest {
     public void testCreate() throws Exception {
         var dto = mapper.map(testTask);
 
-        var request = MockMvcRequestBuilders.post("/api/tasks")
+        var request = post("/api/tasks")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 
@@ -130,7 +133,7 @@ public class TasksControllerTest {
         var dto = mapper.map(testTask);
         dto.setAssigneeId(12345L);
 
-        var request = MockMvcRequestBuilders.post("/api/products")
+        var request = post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 
@@ -150,7 +153,7 @@ public class TasksControllerTest {
         dto.setStatus(anotherTaskStatus.getSlug());
         dto.setAssigneeId(anotherUser.getId());
 
-        var request = MockMvcRequestBuilders.put("/products/{id}", testTask.getId())
+        var request = put("/products/{id}", testTask.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 
@@ -173,7 +176,7 @@ public class TasksControllerTest {
         var dto = new HashMap<String, Long>();
         dto.put("assigneeId", anotherUser.getId());
 
-        var request = MockMvcRequestBuilders.put("/api/tasks/{id}", testTask.getId())
+        var request = put("/api/tasks/{id}", testTask.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 
@@ -191,7 +194,7 @@ public class TasksControllerTest {
 
     public void testDestroy() throws Exception {
         taskRepository.save(testTask);
-        var request = MockMvcRequestBuilders.delete("/api/tasks/{id}", testTask.getId());
+        var request = delete("/api/tasks/{id}", testTask.getId());
         mockMvc.perform(request)
                 .andExpect(status().isOk());
 
