@@ -34,8 +34,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 
-import java.util.HashMap;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TasksControllerTest {
@@ -149,7 +147,8 @@ public class TasksControllerTest {
         var dto = mapper.map(testTask);
         dto.setAssigneeId(12345L);
 
-        var request = post("/api/products")
+        var request = post("/api/tasks")
+                .with(token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 
@@ -169,15 +168,14 @@ public class TasksControllerTest {
         dto.setStatus(JsonNullable.of(anotherTaskStatus.getSlug()));
         dto.setAssigneeId(JsonNullable.of(anotherUser.getId()));
 
-        var request = put("/products/{id}", testTask.getId())
-                .with(token)
+        var request = put("/api/tasks/{id}", testTask.getId()).with(token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 
         mockMvc.perform(request)
                 .andExpect(status().isOk());
 
-        var task = taskRepository.findById(testTask.getId()).get();
+        var task = taskRepository.findById(testTask.getId()).orElse(null);
 
         assertThat(task.getName()).isEqualTo(dto.getTitle());
         assertThat(task.getIndex()).isEqualTo(dto.getIndex());

@@ -2,6 +2,7 @@ package hexlet.code.controller;
 
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.dto.TaskDTO;
+import hexlet.code.repository.UserRepository;
 import hexlet.code.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/tasks")
 public class TasksController {
     private final TaskService taskService;
+    private final UserRepository userRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
@@ -31,8 +33,14 @@ public class TasksController {
                 .body(taskDTOList);
     }
 
+
     @PostMapping
     public ResponseEntity<TaskDTO> createTask(@Valid @RequestBody TaskDTO taskData) {
+        Long assigneeId = taskData.getAssigneeId();
+        if (assigneeId != null && userRepository.findById(assigneeId).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         TaskDTO taskDTO = taskService.create(taskData);
         return new ResponseEntity<>(taskDTO, HttpStatus.CREATED);
     }

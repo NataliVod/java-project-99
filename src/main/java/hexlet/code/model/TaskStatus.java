@@ -25,18 +25,14 @@ public class TaskStatus implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @ToString.Include
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(unique = true)
     @NotBlank
-    @ToString.Include
     private String name;
 
     @Column(unique = true)
     @NotBlank
-    @ToString.Include
     private String slug;
 
     @CreatedDate
