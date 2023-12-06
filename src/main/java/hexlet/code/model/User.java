@@ -96,7 +96,7 @@ public class User implements UserDetails, BaseEntity {
         return true;
     }
 
-    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Task> tasks = new ArrayList<>();
 
     public void addTask(Task task) {

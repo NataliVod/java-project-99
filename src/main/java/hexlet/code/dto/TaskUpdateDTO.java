@@ -14,6 +14,8 @@ import org.openapitools.jackson.nullable.JsonNullable;
 @NoArgsConstructor
 public class TaskUpdateDTO {
 
+    private JsonNullable<Integer> index;
+
     private JsonNullable<String> title;
 
     private JsonNullable<String> content;

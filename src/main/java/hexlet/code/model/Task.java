@@ -26,7 +26,7 @@ public class Task implements BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private Long index;
+    private Integer index;
 
     @NotBlank
     private String name;
@@ -39,7 +39,7 @@ public class Task implements BaseEntity {
     @ManyToOne
     private TaskStatus taskStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User assignee;
 
     @CreatedDate

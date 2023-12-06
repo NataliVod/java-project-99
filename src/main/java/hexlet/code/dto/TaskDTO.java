@@ -1,7 +1,6 @@
 package hexlet.code.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import hexlet.code.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ public class TaskDTO {
 
     private Long id;
 
-    private Long index;
+    private Integer index;
 
     private String title;
 
