@@ -4,6 +4,8 @@ import hexlet.code.dto.TaskDTO;
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.exeption.ResourceNotFoundException;
 import hexlet.code.mapper.TaskMapper;
+import hexlet.code.model.Label;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
@@ -16,9 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskService {
     private final TaskRepository taskRepository;
-    private final TaskMapper taskMapper;
     private final UserRepository userRepository;
     private final TaskStatusRepository taskStatusRepository;
+    private final TaskMapper taskMapper;
 
     public List<TaskDTO> getAll() {
         var tasks = taskRepository.findAll();

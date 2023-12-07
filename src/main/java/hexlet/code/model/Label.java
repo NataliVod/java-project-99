@@ -3,13 +3,13 @@ package hexlet.code.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.*;
-
+import java.util.Date;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -17,34 +17,18 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "tasks")
-public class Task implements BaseEntity {
+@Table(name = "labels")
+public class Label implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private Integer index;
-
-    @NotBlank
-    private String name;
-
-    @Column(columnDefinition = "TEXT")
-    @Lob
-    private String description;
-
+    @Column(unique = true)
     @NotNull
-    @ManyToOne
-    private TaskStatus taskStatus;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User assignee;
-
-   /* @NotNull
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Label> labels = new HashSet<>();*/
+    @Size(min = 3, max = 1000)
+    private String name;
 
     @CreatedDate
     private Date createdAt;
-
 }

@@ -1,11 +1,15 @@
 package hexlet.code.component;
 
+import hexlet.code.dto.LabelDTO;
 import hexlet.code.dto.TaskDTO;
 import hexlet.code.dto.TaskStatusDTO;
 import hexlet.code.dto.UserCreateDTO;
+import hexlet.code.mapper.LabelMapper;
 import hexlet.code.mapper.TaskMapper;
 import hexlet.code.mapper.TaskStatusMapper;
 import hexlet.code.mapper.UserMapper;
+import hexlet.code.model.Label;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
@@ -33,11 +37,16 @@ public class DataInitializer implements ApplicationRunner {
 
     private final TaskStatusMapper taskStatusMapper;
 
+    private final LabelRepository labelRepository;
+
+    private final LabelMapper labelMapper;
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         initiateUser();
         initiateTaskStatuses();
+        initiateLabels();
     }
 
     public void initiateUser() {
@@ -60,6 +69,20 @@ public class DataInitializer implements ApplicationRunner {
             var taskStatus = taskStatusMapper.map(taskStatusData);
             taskStatusRepository.save(taskStatus);
         }
+
+    }
+
+    public void initiateLabels() {
+
+        var newData = new LabelDTO();
+        newData.setName("feature");
+        var newLabel = labelMapper.map(newData);
+        labelRepository.save(newLabel);
+
+        var anotherData = new LabelDTO();
+        anotherData.setName("bug");
+        var anotherLabel = labelMapper.map(anotherData);
+        labelRepository.save(anotherLabel);
 
     }
 

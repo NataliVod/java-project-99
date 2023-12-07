@@ -32,7 +32,7 @@ public class TaskStatusesController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskStatusDTO> createTaskStatuses(@Valid @RequestBody TaskStatusDTO taskData) {
+    public ResponseEntity<TaskStatusDTO> createTaskStatus(@Valid @RequestBody TaskStatusDTO taskData) {
         TaskStatusDTO taskStatusDTO = taskStatusService.create(taskData);
         return new ResponseEntity<>(taskStatusDTO, HttpStatus.CREATED);
     }
