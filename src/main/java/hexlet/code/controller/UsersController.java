@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import java.util.List;
 
 @RestController
@@ -25,12 +30,23 @@ import java.util.List;
 public class UsersController {
     private final UserService userService;
 
+    @Operation(summary = "Get specific user by his id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User found"),
+            @ApiResponse(responseCode = "404", description = "User with that id not found")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getUserById(
+            @Parameter(description = "Id of user to be found")
+            @PathVariable Long id) {
+
         UserDTO userDTO = userService.findById(id);
         return ResponseEntity.ok(userDTO);
     }
 
+
+    @Operation(summary = "Get list of all users")
+    @ApiResponse(responseCode = "200", description = "List of all users")
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> userDTOList = userService.getAll();
@@ -39,20 +55,41 @@ public class UsersController {
                 .body(userDTOList);
     }
 
+
+    @Operation(summary = "Create new user")
+    @ApiResponse(responseCode = "201", description = "User created")
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateDTO userData) {
+    public ResponseEntity<UserDTO> createUser(
+            @Parameter(description = "User data to save")
+            @Valid @RequestBody UserCreateDTO userData) {
         UserDTO userDTO = userService.create(userData);
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Update user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated"),
+            @ApiResponse(responseCode = "404", description = "User with that id not found")
+    })
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO userData) {
+    public ResponseEntity<UserDTO> updateUser(
+            @Parameter(description = "Id of user to be updated")
+            @PathVariable Long id,
+            @Parameter(description = "User data to update")
+            @Valid @RequestBody UserUpdateDTO userData) {
         UserDTO userDTO = userService.update(userData, id);
         return ResponseEntity.ok(userDTO);
     }
 
+    @Operation(summary = "Delete user by his id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User deleted"),
+            @ApiResponse(responseCode = "404", description = "User with that id not found")
+    })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(
+            @Parameter(description = "Id of user to be deleted")
+            @PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }

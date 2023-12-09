@@ -8,6 +8,7 @@ plugins {
     id("io.freefair.lombok") version "8.4"
     id("org.springframework.boot") version "3.1.4"
     id("io.spring.dependency-management") version "1.1.3"
+    id("org.springdoc.openapi-gradle-plugin") version "1.6.0"
 }
 
 group = "hexlet.code"
@@ -41,7 +42,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.mapstruct:mapstruct:1.5.5.Final")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
-    implementation ("io.swagger.core.v3:swagger-annotations:2.2.10")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
     annotationProcessor("org.projectlombok:lombok")
     compileOnly("org.projectlombok:lombok")
@@ -67,11 +67,15 @@ tasks.test {
 }
 checkstyle {
     toolVersion = "10.3.3"
-    }
+}
 
 tasks.jacocoTestReport {
     reports {
         xml.required = true
-        }
     }
+}
+
+openApi {
+    apiDocsUrl.set("http://localhost:8080/v3/api-docs")
+}
 

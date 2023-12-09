@@ -2,6 +2,10 @@ package hexlet.code.controller;
 
 import hexlet.code.dto.AuthRequest;
 import hexlet.code.utils.JWTUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,8 +27,15 @@ public class AuthenticationController {
     @Autowired
     private final AuthenticationManager authenticationManager;
 
+    @Operation(summary = "Authenticate user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User authenticated"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @PostMapping("/login")
-    public String create(@RequestBody AuthRequest authRequest) {
+    public String create(
+            @Parameter(description = "User data to get authentication")
+            @RequestBody AuthRequest authRequest) {
         var authentication = new UsernamePasswordAuthenticationToken(
                 authRequest.getUsername(), authRequest.getPassword());
 
