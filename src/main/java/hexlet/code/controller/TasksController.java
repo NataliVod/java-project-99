@@ -1,5 +1,6 @@
 package hexlet.code.controller;
 
+import hexlet.code.dto.TaskParamsDTO;
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.dto.TaskDTO;
 import hexlet.code.repository.UserRepository;
@@ -8,14 +9,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -48,8 +42,11 @@ public class TasksController {
     @Operation(summary = "Get list of all tasks")
     @ApiResponse(responseCode = "200", description = "List of all tasks")
     @GetMapping
-    public ResponseEntity<List<TaskDTO>> getAllTasks() {
-        List<TaskDTO> taskDTOList = taskService.getAll();
+    public ResponseEntity<List<TaskDTO>> getAllTasks(
+            @Parameter(description = "Task data to search")
+            TaskParamsDTO taskData
+            ) {
+        List<TaskDTO> taskDTOList = taskService.getAll(taskData);
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(taskDTOList.size()))
                 .body(taskDTOList);

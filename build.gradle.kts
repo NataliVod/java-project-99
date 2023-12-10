@@ -9,6 +9,7 @@ plugins {
     id("org.springframework.boot") version "3.1.4"
     id("io.spring.dependency-management") version "1.1.3"
     id("org.springdoc.openapi-gradle-plugin") version "1.6.0"
+    id("io.sentry.jvm.gradle") version "4.0.0"
 }
 
 group = "hexlet.code"
@@ -78,4 +79,12 @@ tasks.jacocoTestReport {
 openApi {
     apiDocsUrl.set("http://localhost:8080/v3/api-docs")
 }
+
+sentry {
+    includeSourceContext.set(true)
+    org.set("natalia-oe")
+    projectName.set("java-spring-boot")
+    authToken.set(System.getenv("SENTRY_AUTH_TOKEN"))
+}
+
 

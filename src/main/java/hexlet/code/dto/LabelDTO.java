@@ -1,5 +1,6 @@
 package hexlet.code.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,6 +23,7 @@ public class LabelDTO {
     @Size(min = 3, max = 1000)
     private String name;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createdAt;
 
 }

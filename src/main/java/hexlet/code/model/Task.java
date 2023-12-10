@@ -3,8 +3,10 @@ package hexlet.code.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,6 +19,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
+@ToString(includeFieldNames = true, onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "tasks")
 public class Task implements BaseEntity {
 
@@ -27,6 +31,7 @@ public class Task implements BaseEntity {
     private Integer index;
 
     @NotBlank
+    @ToString.Include
     private String name;
 
     @Column(columnDefinition = "TEXT")
@@ -35,14 +40,17 @@ public class Task implements BaseEntity {
 
     @NotNull
     @ManyToOne
+    @ToString.Include
     private TaskStatus taskStatus;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @ToString.Include
     private User assignee;
 
-   /* @NotNull
+    @NotNull
+    @ToString.Include
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Label> labels = new HashSet<>();*/
+    private Set<Label> labels = new HashSet<>();
 
     @CreatedDate
     private Date createdAt;

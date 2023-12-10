@@ -1,15 +1,16 @@
 package hexlet.code.service;
 
 import hexlet.code.dto.TaskDTO;
+import hexlet.code.dto.TaskParamsDTO;
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.exeption.ResourceNotFoundException;
 import hexlet.code.mapper.TaskMapper;
-import hexlet.code.model.Label;
-import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
+import hexlet.code.specification.TaskSpecification;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +22,11 @@ public class TaskService {
     private final UserRepository userRepository;
     private final TaskStatusRepository taskStatusRepository;
     private final TaskMapper taskMapper;
+    private TaskSpecification specBuilder;
 
-    public List<TaskDTO> getAll() {
-        var tasks = taskRepository.findAll();
+    public List<TaskDTO> getAll(TaskParamsDTO taskData) {
+        var specification = specBuilder.build(taskData);
+        var tasks = taskRepository.findAll(specification);
         var result = tasks.stream()
                 .map(taskMapper::map)
                 .toList();
