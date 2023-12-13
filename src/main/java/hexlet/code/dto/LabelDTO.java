@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.Date;
 
@@ -17,13 +18,13 @@ import java.util.Date;
 @NoArgsConstructor
 public class LabelDTO {
 
-    private Long id;
+    private JsonNullable<Long> id;
 
     @NotNull
     @Size(min = 3, max = 1000)
-    private String name;
+    private JsonNullable<String> name;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date createdAt;
+    private JsonNullable<Date> createdAt;
 
 }

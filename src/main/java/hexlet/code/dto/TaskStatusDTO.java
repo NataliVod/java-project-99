@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.Date;
 
@@ -15,15 +16,15 @@ import java.util.Date;
 @NoArgsConstructor
 public class TaskStatusDTO {
 
-    private Long id;
+    private JsonNullable<Long> id;
 
     @NotBlank
-    private String name;
+    private JsonNullable<String> name;
 
     @NotBlank
-    private String Slug;
+    private JsonNullable<String> slug;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date createdAt;
+    private JsonNullable<Date> createdAt;
 
 }

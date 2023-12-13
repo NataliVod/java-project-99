@@ -1,11 +1,9 @@
 package hexlet.code.mapper;
 
 import hexlet.code.dto.TaskDTO;
-import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.model.Label;
 import hexlet.code.model.Task;
 import hexlet.code.repository.LabelRepository;
-import hexlet.code.repository.TaskRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -24,11 +22,11 @@ import java.util.stream.Collectors;
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
-public abstract class TaskMapper {
+public abstract class   TaskMapper {
     @Autowired
     private LabelRepository labelRepository;
 
-    @Mapping(target = "taskStatus.slug", source = "status")
+    @Mapping(target = "taskStatus", source = "status")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "assignee", source = "assigneeId")
@@ -44,14 +42,14 @@ public abstract class TaskMapper {
     @Mapping(source = "assignee.id", target = "assigneeId")
     public abstract TaskDTO map(Task model);
 
-    @Mapping(target = "taskStatus.slug", source = "status")
+    @Mapping(target = "taskStatus", source = "status")
     @Mapping(target = "labels", source = "labelIds")
     @Mapping(target = "description", source = "content")
     @Mapping(target = "assignee", source = "assigneeId")
     @Mapping(target = "name", source = "title")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    public abstract void update(TaskUpdateDTO dto, @MappingTarget Task model);
+    public abstract void update(TaskDTO dto, @MappingTarget Task model);
 
     public List<Long> getLabelIds(Set<Label> labels) {
         return labels.stream()

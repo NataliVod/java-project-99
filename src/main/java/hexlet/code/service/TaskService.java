@@ -2,14 +2,15 @@ package hexlet.code.service;
 
 import hexlet.code.dto.TaskDTO;
 import hexlet.code.dto.TaskParamsDTO;
-import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.exeption.ResourceNotFoundException;
 import hexlet.code.mapper.TaskMapper;
+import hexlet.code.model.Task;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.specification.TaskSpecification;
 import lombok.AllArgsConstructor;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -33,21 +34,13 @@ public class TaskService {
         return result;
     }
 
-    public TaskDTO create(TaskDTO taskData) {
+    public Task create(TaskDTO taskData) {
         var task = taskMapper.map(taskData);
-
-        var assigneeId = taskData.getAssigneeId();
-        var assignee = userRepository.findById(assigneeId).orElse(null);
-        task.setAssignee(assignee);
-
         var slug = taskData.getStatus();
-        var status = taskStatusRepository.findBySlug(slug).orElse(null);
+        var status = taskStatusRepository.findBySlug(slug.get()).orElseThrow(() -> new ResourceNotFoundException("Status Not Found: " + slug));
         task.setTaskStatus(status);
+        return taskRepository.save(task);
 
-
-        taskRepository.save(task);
-        var taskDTO = taskMapper.map(task);
-        return taskDTO;
     }
 
     public TaskDTO findById(Long id) {
@@ -57,23 +50,14 @@ public class TaskService {
         return taskDTO;
     }
 
-    public TaskDTO update(TaskUpdateDTO taskData, Long id) {
+    public Task update(TaskDTO taskData, Long id) {
         var task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task Not Found: " + id));
-
-        taskMapper.update(taskData, task);
-
-        var assigneeId = taskData.getAssigneeId();
-        var assignee = userRepository.findById(assigneeId.get()).orElse(null);
-        task.setAssignee(assignee);
-
         var slug = taskData.getStatus();
-        var status = taskStatusRepository.findBySlug(slug.get()).orElse(null);
+        var status = taskStatusRepository.findBySlug(slug.get()).orElseThrow(() -> new ResourceNotFoundException("Status Not Found: " + slug));
         task.setTaskStatus(status);
-
-        taskRepository.save(task);
-        var taskDTO = taskMapper.map(task);
-        return taskDTO;
+        taskMapper.update(taskData, task);
+        return taskRepository.save(task);
     }
 
     public void delete(Long id) {

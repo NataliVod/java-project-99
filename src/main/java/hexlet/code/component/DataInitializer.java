@@ -15,6 +15,7 @@ import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Array;
+import java.util.Arrays;
 
 @Component
 @AllArgsConstructor
@@ -62,25 +64,27 @@ public class DataInitializer implements ApplicationRunner {
     public void initiateTaskStatuses() {
         String[][] data = {{"draft", "Draft"}, {"to_review", "ToReview"}, {"to_be_fixed", "ToBeFixed"},
                 {"to_publish", "ToPublish"}, {"published", "Published"}};
-        for (var slugAndName : data) {
-            var taskStatusData = new TaskStatusDTO();
-            taskStatusData.setSlug(slugAndName[0]);
-            taskStatusData.setName(slugAndName[1]);
-            var taskStatus = taskStatusMapper.map(taskStatusData);
-            taskStatusRepository.save(taskStatus);
-        }
+        Arrays.stream(data)
+                .map(slugAndName -> {
+                    TaskStatusDTO taskStatusData = new TaskStatusDTO();
+                    taskStatusData.setSlug(JsonNullable.of(slugAndName[0]));
+                    taskStatusData.setName(JsonNullable.of(slugAndName[1]));
+                    return taskStatusMapper.map(taskStatusData);
+                })
+                .forEach(taskStatusRepository::save);
+
 
     }
 
     public void initiateLabels() {
 
         var newData = new LabelDTO();
-        newData.setName("feature");
+        newData.setName(JsonNullable.of("feature"));
         var newLabel = labelMapper.map(newData);
         labelRepository.save(newLabel);
 
         var anotherData = new LabelDTO();
-        anotherData.setName("bug");
+        anotherData.setName(JsonNullable.of("bug"));
         var anotherLabel = labelMapper.map(anotherData);
         labelRepository.save(anotherLabel);
 

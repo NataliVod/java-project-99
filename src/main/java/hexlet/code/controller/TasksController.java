@@ -1,8 +1,9 @@
 package hexlet.code.controller;
 
 import hexlet.code.dto.TaskParamsDTO;
-import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.dto.TaskDTO;
+import hexlet.code.mapper.TaskMapper;
+import hexlet.code.model.Task;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.service.TaskService;
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ import java.util.List;
 public class TasksController {
     private final TaskService taskService;
     private final UserRepository userRepository;
+    private TaskMapper taskMapper;
 
     @Operation(summary = "Get specific task by its id")
     @ApiResponses(value = {
@@ -58,13 +60,13 @@ public class TasksController {
     public ResponseEntity<TaskDTO> createTask(
             @Parameter(description = "Task data to save")
             @Valid @RequestBody TaskDTO taskData) {
-        Long assigneeId = taskData.getAssigneeId();
+        /*Long assigneeId = taskData.getAssigneeId().orElse();
         if (assigneeId != null && userRepository.findById(assigneeId).isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        }*/
 
-        TaskDTO taskDTO = taskService.create(taskData);
-        return new ResponseEntity<>(taskDTO, HttpStatus.CREATED);
+        Task task = taskService.create(taskData);
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskMapper.map(task));
     }
 
     @Operation(summary = "Update task")
@@ -77,9 +79,9 @@ public class TasksController {
             @Parameter(description = "Id of label to be updated")
             @PathVariable Long id,
             @Parameter(description = "Task data to update")
-            @Valid @RequestBody TaskUpdateDTO taskData) {
-        TaskDTO taskDTO = taskService.update(taskData, id);
-        return ResponseEntity.ok(taskDTO);
+            @Valid @RequestBody TaskDTO taskData) {
+        Task task = taskService.update(taskData, id);
+        return ResponseEntity.ok(taskMapper.map(task));
     }
 
     @Operation(summary = "Delete task by his id")

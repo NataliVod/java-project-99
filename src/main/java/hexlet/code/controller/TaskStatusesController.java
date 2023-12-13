@@ -1,7 +1,6 @@
 package hexlet.code.controller;
 
 import hexlet.code.dto.TaskStatusDTO;
-import hexlet.code.dto.TaskStatusUpdateDTO;
 import hexlet.code.service.TaskStatusService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -72,7 +71,7 @@ public class TaskStatusesController {
             @Parameter(description = "Id of task status to be updated")
             @PathVariable Long id,
             @Parameter(description = "Task status data to update")
-            @Valid @RequestBody TaskStatusUpdateDTO taskData) {
+            @Valid @RequestBody TaskStatusDTO taskData) {
         TaskStatusDTO taskStatusDTO = taskStatusService.update(taskData, id);
         return ResponseEntity.ok(taskStatusDTO);
     }

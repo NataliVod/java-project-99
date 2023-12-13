@@ -1,7 +1,6 @@
 package hexlet.code.controller;
 
 import hexlet.code.dto.LabelDTO;
-import hexlet.code.dto.LabelUpdateDTO;
 import hexlet.code.service.LabelService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -73,7 +72,7 @@ public class LabelsController {
             @Parameter(description = "Id of label to be updated")
             @PathVariable Long id,
             @Parameter(description = "Label data to update")
-            @Valid @RequestBody LabelUpdateDTO labelData) {
+            @Valid @RequestBody LabelDTO labelData) {
         LabelDTO labelDTO = labelService.update(labelData, id);
         return ResponseEntity.ok(labelDTO);
     }

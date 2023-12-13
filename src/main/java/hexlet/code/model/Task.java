@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -39,7 +41,7 @@ public class Task implements BaseEntity {
     private String description;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Include
     private TaskStatus taskStatus;
 
@@ -47,9 +49,8 @@ public class Task implements BaseEntity {
     @ToString.Include
     private User assignee;
 
-    @NotNull
-    @ToString.Include
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+    @Fetch(FetchMode.JOIN)
     private Set<Label> labels = new HashSet<>();
 
     @CreatedDate
