@@ -36,21 +36,15 @@ public class LabelsControllerTest {
     private ObjectMapper om;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private LabelRepository labelRepository;
 
     @Autowired
     private LabelMapper mapper;
 
-    private Label testLabel;
-
     @Autowired
     private ModelGenerator modelGenerator;
 
-    @Autowired
-    private UserUtils userUtils;
+    private Label testLabel;
 
     @BeforeEach
     public void setUp() {

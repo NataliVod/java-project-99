@@ -35,9 +35,6 @@ public class TaskStatusesControllerTest {
     private ObjectMapper om;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private TaskStatusRepository taskStatusRepository;
 
     @Autowired
@@ -47,9 +44,6 @@ public class TaskStatusesControllerTest {
 
     @Autowired
     private ModelGenerator modelGenerator;
-
-    @Autowired
-    private UserUtils userUtils;
 
     @BeforeEach
     public void setUp() {

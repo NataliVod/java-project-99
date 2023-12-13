@@ -60,10 +60,10 @@ public class TasksController {
     public ResponseEntity<TaskDTO> createTask(
             @Parameter(description = "Task data to save")
             @Valid @RequestBody TaskDTO taskData) {
-        /*Long assigneeId = taskData.getAssigneeId().orElse();
+        Long assigneeId = taskData.getAssigneeId().orElse(null);
         if (assigneeId != null && userRepository.findById(assigneeId).isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }*/
+        }
 
         Task task = taskService.create(taskData);
         return ResponseEntity.status(HttpStatus.CREATED).body(taskMapper.map(task));
