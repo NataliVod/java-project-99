@@ -193,19 +193,23 @@ public class TasksControllerTest {
         data.setStatus(JsonNullable.of(anotherTaskStatus.getSlug()));
         data.setAssigneeId(JsonNullable.of(anotherUser.getId()));
 */
-       var task = Instancio.of(modelGenerator.getTaskModel())
-                .create();
-        var data = mapper.map(task);
-       // data.setStatus(JsonNullable.of(anotherTaskStatus.getSlug()));
 
-        var request = put("/api/tasks/{id}" + testTask.getId()).with(jwt())
+        var task = Instancio.of(modelGenerator.getTaskModel())
+                //.set(Select.field(Task::getAssignee), null)
+                .create();
+        task.setLabels(Set.of(anotherLabel));
+        task.setAssignee(anotherUser);
+        task.setTaskStatus(anotherTaskStatus);
+        var data = mapper.map(task);
+
+
+        var request = put("/api/tasks/" + testTask.getId()).with(jwt())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(data));
 
         mockMvc.perform(request)
                 .andExpect(status().isOk());
-
-       /* var updatedTask = taskRepository.findById(testTask.getId()).orElse(null);*/
+        /* var updatedTask = taskRepository.findById(testTask.getId()).orElse(null);*/
 /*
         assertThat(task).isNotNull();
         assertThat(task.getName()).isEqualTo(data.getTitle().get());
@@ -221,12 +225,14 @@ public class TasksControllerTest {
 
     }
 
+    @Test
     public void testDestroy() throws Exception {
-        taskRepository.save(testTask);
+
         var request = delete("/api/tasks/{id}", testTask.getId()).with(jwt());
         mockMvc.perform(request)
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         assertThat(taskRepository.existsById(testTask.getId())).isEqualTo(false);
     }
+
 }
