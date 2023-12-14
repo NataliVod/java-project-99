@@ -47,7 +47,7 @@ public class User implements UserDetails, BaseEntity {
     private Long id;
 
     @Column(unique = true)
-    @NotNull
+    @NotNull(message = "The field \"name\" is not filled in")
     @Email
     @ToString.Include
     private String email;
@@ -58,8 +58,8 @@ public class User implements UserDetails, BaseEntity {
     @ToString.Include
     private String lastName;
 
-    @NotNull
-    @Size(min = 3)
+    @NotNull(message = "Please enter your password")
+    @Size(min = 3, message = "The password must be longer than three characters")
     @JsonIgnore
     private String passwordDigest;
 

@@ -10,6 +10,7 @@ import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 @Getter
@@ -32,6 +33,7 @@ public class TaskDTO {
     private JsonNullable<String> status;
 
     private JsonNullable<List<Long>> labelIds;
+
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private JsonNullable<Date> createdAt;

@@ -3,17 +3,15 @@ package hexlet.code.mapper;
 import hexlet.code.dto.TaskDTO;
 import hexlet.code.model.Label;
 import hexlet.code.model.Task;
-import hexlet.code.repository.LabelRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.openapitools.jackson.nullable.JsonNullable;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Mapper(
@@ -22,9 +20,9 @@ import java.util.stream.Collectors;
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
-public abstract class   TaskMapper {
-    @Autowired
-    private LabelRepository labelRepository;
+public abstract class TaskMapper {
+
+    private ReferenceMapper referenceMapper;
 
     @Mapping(target = "taskStatus", source = "status")
     @Mapping(target = "id", ignore = true)
@@ -51,15 +49,28 @@ public abstract class   TaskMapper {
     @Mapping(target = "createdAt", ignore = true)
     public abstract void update(TaskDTO dto, @MappingTarget Task model);
 
-    public List<Long> getLabelIds(Set<Label> labels) {
-        return labels.stream()
-                .map(label -> label.getId())
-                .collect(Collectors.toList());
-    }
+       public Set<Label> map(JsonNullable<List<Long>> labelIds) {
+        if (labelIds == null ) {
+            return null;
+        }
 
-    public Set<Label> getLabels(List<Long> labelIds) {
-        return labelIds.stream()
-                .map(id -> labelRepository.findById(id).orElse(null))
+        List<Long> ids = labelIds.get();
+        return ids.stream()
+                .map(id -> referenceMapper.toEntity(id, Label.class))
                 .collect(Collectors.toSet());
     }
+
+    public JsonNullable<List<Long>> map(Set<Label> labels) {
+        if (labels == null ) {
+            return null;
+        }
+
+        List<Long> labelIds = labels.stream()
+                .map(Label::getId)
+                .collect(Collectors.toList());
+
+        return JsonNullable.of(labelIds);
+    }
 }
+
+
