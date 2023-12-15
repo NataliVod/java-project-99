@@ -3,6 +3,7 @@ package hexlet.code.mapper;
 import hexlet.code.dto.TaskDTO;
 import hexlet.code.model.Label;
 import hexlet.code.model.Task;
+import hexlet.code.repository.LabelRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -10,6 +11,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.openapitools.jackson.nullable.JsonNullable;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,7 +24,8 @@ import java.util.stream.Collectors;
 )
 public abstract class TaskMapper {
 
-    private ReferenceMapper referenceMapper;
+    @Autowired
+    private LabelRepository labelRepository;
 
     @Mapping(target = "taskStatus", source = "status")
     @Mapping(target = "id", ignore = true)
@@ -56,7 +59,7 @@ public abstract class TaskMapper {
 
         List<Long> ids = labelIds.get();
         return ids.stream()
-                .map(id -> referenceMapper.toEntity(id, Label.class))
+                .map(id -> labelRepository.findById(id).orElse(null))
                 .collect(Collectors.toSet());
     }
 

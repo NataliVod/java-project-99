@@ -30,6 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -97,10 +98,12 @@ public class TasksControllerTest {
         userRepository.save(user);
         userRepository.save(anotherUser);
 
+        var labels = new HashSet(Set.of(label));
+
         testTask = Instancio.of(modelGenerator.getTaskModel())
                 .set(Select.field(Task::getAssignee), null)
                 .create();
-        testTask.setLabels(Set.of(label));
+        testTask.setLabels(labels);
         testTask.setAssignee(user);
         testTask.setTaskStatus(taskStatus);
         taskRepository.save(testTask);
@@ -187,17 +190,11 @@ public class TasksControllerTest {
     @Transactional
     @Test
     public void testUpdate() throws Exception {
-      /*  var data = new TaskDTO();
-        data.setTitle(JsonNullable.of("Another Name"));
-        data.setContent(JsonNullable.of("Another content"));
-        data.setStatus(JsonNullable.of(anotherTaskStatus.getSlug()));
-        data.setAssigneeId(JsonNullable.of(anotherUser.getId()));
-*/
-
         var task = Instancio.of(modelGenerator.getTaskModel())
                 //.set(Select.field(Task::getAssignee), null)
                 .create();
-        task.setLabels(Set.of(anotherLabel));
+        var labels = new HashSet(Set.of(anotherLabel));
+        task.setLabels(labels);
         task.setAssignee(anotherUser);
         task.setTaskStatus(anotherTaskStatus);
         var data = mapper.map(task);
@@ -209,21 +206,35 @@ public class TasksControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isOk());
-        /* var updatedTask = taskRepository.findById(testTask.getId()).orElse(null);*/
-/*
-        assertThat(task).isNotNull();
-        assertThat(task.getName()).isEqualTo(data.getTitle().get());
-        assertThat(task.getDescription()).isEqualTo(data.getContent().get());
-        assertThat(task.getTaskStatus().getSlug()).isEqualTo(data.getStatus().get());
-        assertThat(task.getAssignee().getId()).isEqualTo(data.getAssigneeId().get());*/
+        var updatedTask = taskRepository.findById(testTask.getId()).orElse(null);
+        assertThat(updatedTask).isNotNull();
+        assertThat(updatedTask.getName()).isEqualTo(data.getTitle().get());
+        assertThat(updatedTask.getDescription()).isEqualTo(data.getContent().get());
+        assertThat(updatedTask.getTaskStatus().getSlug()).isEqualTo(data.getStatus().get());
+        assertThat(updatedTask.getAssignee().getId()).isEqualTo(data.getAssigneeId().get());
     }
 
-    @Transactional
+    /*@Transactional
     @Test
     public void testPartialUpdate() throws Exception {
+        var data = new TaskDTO();
+        data.setTitle(JsonNullable.of("Another Name"));
+        data.setContent(JsonNullable.of("Another content"));
+        data.setAssigneeId(JsonNullable.of(anotherUser.getId()));
 
+        var request = put("/api/tasks/" + testTask.getId()).with(jwt())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(data));
 
-    }
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+        var updatedTask = taskRepository.findById(testTask.getId()).orElse(null);
+        assertThat(updatedTask).isNotNull();
+        assertThat(updatedTask.getName()).isEqualTo(data.getTitle().get());
+        assertThat(updatedTask.getDescription()).isEqualTo(data.getContent().get());
+        assertThat(updatedTask.getTaskStatus().getSlug()).isEqualTo(data.getStatus().get());
+        assertThat(updatedTask.getAssignee().getId()).isEqualTo(data.getAssigneeId().get());
+    }*/
 
     @Test
     public void testDestroy() throws Exception {

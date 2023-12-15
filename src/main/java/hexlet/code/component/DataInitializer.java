@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Array;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @AllArgsConstructor
@@ -39,16 +41,21 @@ public class DataInitializer implements ApplicationRunner {
 
     private final TaskStatusMapper taskStatusMapper;
 
+
     private final LabelRepository labelRepository;
 
     private final LabelMapper labelMapper;
 
+    private final TaskRepository taskRepository;
+
+    private final TaskMapper taskMapper;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         initiateUser();
         initiateTaskStatuses();
         initiateLabels();
+        initiateTask();
     }
 
     public void initiateUser() {
@@ -87,6 +94,23 @@ public class DataInitializer implements ApplicationRunner {
         anotherData.setName(JsonNullable.of("bug"));
         var anotherLabel = labelMapper.map(anotherData);
         labelRepository.save(anotherLabel);
+
+    }
+
+    public void initiateTask() {
+
+        var newData = new TaskDTO();
+        var user = userRepository.findByEmail("hexlet@example.com").orElseThrow();
+        var status = taskStatusRepository.findBySlug("draft").orElseThrow();
+        var label = labelRepository.findByName("feature").orElseThrow();
+        var labels = new HashSet(Set.of(label));
+        newData.setTitle(JsonNullable.of("test task"));
+        newData.setContent(JsonNullable.of("test content"));
+        newData.setAssigneeId(JsonNullable.of(user.getId()));
+        newData.setLabelIds(taskMapper.map(labels));
+        var newTask = taskMapper.map(newData);
+        newTask.setTaskStatus(status);
+        taskRepository.save(newTask);
 
     }
 

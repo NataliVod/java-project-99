@@ -80,11 +80,13 @@ openApi {
     apiDocsUrl.set("http://localhost:8080/v3/api-docs")
 }
 
+/*
 sentry {
     includeSourceContext.set(true)
     org.set("natalia-oe")
     projectName.set("java-spring-boot")
     authToken.set(System.getenv("SENTRY_AUTH_TOKEN"))
 }
+*/
 
 
