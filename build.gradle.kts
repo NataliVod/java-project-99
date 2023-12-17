@@ -92,4 +92,3 @@ tasks.named("sentryBundleSourcesJava") {
         project.hasProperty("production")
     }
 }
-
