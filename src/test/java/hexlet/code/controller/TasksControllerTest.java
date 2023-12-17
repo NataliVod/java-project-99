@@ -212,15 +212,19 @@ public class TasksControllerTest {
         assertThat(updatedTask.getDescription()).isEqualTo(data.getContent().get());
         assertThat(updatedTask.getTaskStatus().getSlug()).isEqualTo(data.getStatus().get());
         assertThat(updatedTask.getAssignee().getId()).isEqualTo(data.getAssigneeId().get());
+        assertThat(updatedTask.getLabels())
+                .extracting(Label::getId)
+                .containsExactlyElementsOf(data.getLabelIds().get());
     }
 
-    /*@Transactional
+    @Transactional
     @Test
     public void testPartialUpdate() throws Exception {
+
         var data = new TaskDTO();
         data.setTitle(JsonNullable.of("Another Name"));
         data.setContent(JsonNullable.of("Another content"));
-        data.setAssigneeId(JsonNullable.of(anotherUser.getId()));
+        data.setStatus(JsonNullable.of(anotherTaskStatus.getSlug()));
 
         var request = put("/api/tasks/" + testTask.getId()).with(jwt())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -233,8 +237,7 @@ public class TasksControllerTest {
         assertThat(updatedTask.getName()).isEqualTo(data.getTitle().get());
         assertThat(updatedTask.getDescription()).isEqualTo(data.getContent().get());
         assertThat(updatedTask.getTaskStatus().getSlug()).isEqualTo(data.getStatus().get());
-        assertThat(updatedTask.getAssignee().getId()).isEqualTo(data.getAssigneeId().get());
-    }*/
+    }
 
     @Test
     public void testDestroy() throws Exception {

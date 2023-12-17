@@ -2,6 +2,8 @@ package hexlet.code.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class TaskDTO {
 
     private JsonNullable<Integer> index;
 
+    @NotBlank
     private JsonNullable<String> title;
 
     private JsonNullable<String> content;
@@ -30,6 +33,7 @@ public class TaskDTO {
     @JsonProperty("assignee_id")
     private JsonNullable<Long> assigneeId;
 
+    @NotNull
     private JsonNullable<String> status;
 
     private JsonNullable<List<Long>> labelIds;
