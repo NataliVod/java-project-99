@@ -13,7 +13,8 @@ import org.mapstruct.ReportingPolicy;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(
@@ -52,8 +53,8 @@ public abstract class TaskMapper {
     @Mapping(target = "createdAt", ignore = true)
     public abstract void update(TaskDTO dto, @MappingTarget Task model);
 
-       public Set<Label> map(JsonNullable<List<Long>> labelIds) {
-        if (labelIds == null ) {
+    public Set<Label> map(JsonNullable<List<Long>> labelIds) {
+        if (labelIds == null) {
             return null;
         }
 
@@ -64,7 +65,7 @@ public abstract class TaskMapper {
     }
 
     public JsonNullable<List<Long>> map(Set<Label> labels) {
-        if (labels == null ) {
+        if (labels == null) {
             return null;
         }
 

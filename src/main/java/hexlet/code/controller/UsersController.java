@@ -32,8 +32,8 @@ public class UsersController {
 
     @Operation(summary = "Get specific user by his id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User found"),
-            @ApiResponse(responseCode = "404", description = "User with that id not found")
+        @ApiResponse(responseCode = "200", description = "User found"),
+        @ApiResponse(responseCode = "404", description = "User with that id not found")
     })
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(
@@ -44,7 +44,6 @@ public class UsersController {
         return ResponseEntity.ok(userDTO);
     }
 
-
     @Operation(summary = "Get list of all users")
     @ApiResponse(responseCode = "200", description = "List of all users")
     @GetMapping
@@ -54,7 +53,6 @@ public class UsersController {
                 .header("X-Total-Count", String.valueOf(userDTOList.size()))
                 .body(userDTOList);
     }
-
 
     @Operation(summary = "Create new user")
     @ApiResponse(responseCode = "201", description = "User created")
@@ -68,8 +66,8 @@ public class UsersController {
 
     @Operation(summary = "Update user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User updated"),
-            @ApiResponse(responseCode = "404", description = "User with that id not found")
+        @ApiResponse(responseCode = "200", description = "User updated"),
+        @ApiResponse(responseCode = "404", description = "User with that id not found")
     })
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(
@@ -83,8 +81,8 @@ public class UsersController {
 
     @Operation(summary = "Delete user by his id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User deleted"),
-            @ApiResponse(responseCode = "404", description = "User with that id not found")
+        @ApiResponse(responseCode = "200", description = "User deleted"),
+        @ApiResponse(responseCode = "404", description = "User with that id not found")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(

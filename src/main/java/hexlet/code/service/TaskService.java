@@ -35,7 +35,8 @@ public class TaskService {
     public Task create(TaskDTO taskData) {
         var task = taskMapper.map(taskData);
         var slug = taskData.getStatus();
-        var status = taskStatusRepository.findBySlug(slug.get()).orElseThrow(() -> new ResourceNotFoundException("Status Not Found: " + slug));
+        var status = taskStatusRepository.findBySlug(slug.get())
+                .orElseThrow(() -> new ResourceNotFoundException("Status Not Found: " + slug));
         task.setTaskStatus(status);
         return taskRepository.save(task);
 
@@ -52,7 +53,8 @@ public class TaskService {
         var task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task Not Found: " + id));
         var slug = taskData.getStatus();
-        var status = taskStatusRepository.findBySlug(slug.get()).orElseThrow(() -> new ResourceNotFoundException("Status Not Found: " + slug));
+        var status = taskStatusRepository.findBySlug(slug.get())
+                .orElseThrow(() -> new ResourceNotFoundException("Status Not Found: " + slug));
         task.setTaskStatus(status);
         taskMapper.update(taskData, task);
         return taskRepository.save(task);

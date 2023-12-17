@@ -31,8 +31,8 @@ public class LabelsController {
 
     @Operation(summary = "Get specific label by its id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Label found"),
-            @ApiResponse(responseCode = "404", description = "Label with that id not found")
+        @ApiResponse(responseCode = "200", description = "Label found"),
+        @ApiResponse(responseCode = "404", description = "Label with that id not found")
     })
     @GetMapping("/{id}")
     public ResponseEntity<LabelDTO> getLabelById(
@@ -64,8 +64,8 @@ public class LabelsController {
 
     @Operation(summary = "Update label")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Label updated"),
-            @ApiResponse(responseCode = "404", description = "Label with that id not found")
+        @ApiResponse(responseCode = "200", description = "Label updated"),
+        @ApiResponse(responseCode = "404", description = "Label with that id not found")
     })
     @PutMapping("/{id}")
     public ResponseEntity<LabelDTO> updateLabel(
@@ -79,8 +79,8 @@ public class LabelsController {
 
     @Operation(summary = "Delete label by his id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Label deleted"),
-            @ApiResponse(responseCode = "404", description = "label with that id not found")
+        @ApiResponse(responseCode = "200", description = "Label deleted"),
+        @ApiResponse(responseCode = "404", description = "label with that id not found")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLabel(

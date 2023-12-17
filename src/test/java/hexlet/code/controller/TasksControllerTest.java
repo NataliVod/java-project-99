@@ -98,7 +98,7 @@ public class TasksControllerTest {
         userRepository.save(user);
         userRepository.save(anotherUser);
 
-        var labels = new HashSet(Set.of(label));
+        var labels = new HashSet<Label>(Set.of(label));
 
         testTask = Instancio.of(modelGenerator.getTaskModel())
                 .set(Select.field(Task::getAssignee), null)
@@ -193,7 +193,7 @@ public class TasksControllerTest {
         var task = Instancio.of(modelGenerator.getTaskModel())
                 //.set(Select.field(Task::getAssignee), null)
                 .create();
-        var labels = new HashSet(Set.of(anotherLabel));
+        var labels = new HashSet<Label>(Set.of(anotherLabel));
         task.setLabels(labels);
         task.setAssignee(anotherUser);
         task.setTaskStatus(anotherTaskStatus);

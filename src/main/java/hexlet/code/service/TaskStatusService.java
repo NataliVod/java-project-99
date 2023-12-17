@@ -3,7 +3,6 @@ package hexlet.code.service;
 import hexlet.code.dto.TaskStatusDTO;
 import hexlet.code.exeption.ResourceNotFoundException;
 import hexlet.code.mapper.TaskStatusMapper;
-import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.TaskStatusRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,10 +37,10 @@ public class TaskStatusService {
         return taskStatusDTO;
     }
 
-    public TaskStatusDTO update(TaskStatusDTO TaskStatusData, Long id) {
+    public TaskStatusDTO update(TaskStatusDTO taskStatusData, Long id) {
         var taskStatus = taskStatusRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TaskStatus Not Found: " + id));
-        taskStatusMapper.update(TaskStatusData, taskStatus);
+        taskStatusMapper.update(taskStatusData, taskStatus);
         taskStatusRepository.save(taskStatus);
         var taskStatusDTO = taskStatusMapper.map(taskStatus);
         return taskStatusDTO;
@@ -50,6 +49,5 @@ public class TaskStatusService {
     public void delete(Long id) {
         taskStatusRepository.deleteById(id);
     }
-
 
 }

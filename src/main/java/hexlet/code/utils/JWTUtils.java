@@ -1,7 +1,5 @@
 package hexlet.code.utils;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -28,4 +26,3 @@ public class JWTUtils {
         return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 }
-

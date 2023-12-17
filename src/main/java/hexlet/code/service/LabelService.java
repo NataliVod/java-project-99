@@ -51,5 +51,4 @@ public class LabelService {
         labelRepository.deleteById(id);
     }
 
-
 }

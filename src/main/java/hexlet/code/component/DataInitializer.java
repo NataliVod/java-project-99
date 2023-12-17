@@ -1,31 +1,22 @@
 package hexlet.code.component;
 
 import hexlet.code.dto.LabelDTO;
-import hexlet.code.dto.TaskDTO;
 import hexlet.code.dto.TaskStatusDTO;
 import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.mapper.LabelMapper;
-import hexlet.code.mapper.TaskMapper;
 import hexlet.code.mapper.TaskStatusMapper;
 import hexlet.code.mapper.UserMapper;
-import hexlet.code.model.Label;
 import hexlet.code.repository.LabelRepository;
-import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.util.Strings;
 import org.openapitools.jackson.nullable.JsonNullable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.sql.Array;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 @AllArgsConstructor
@@ -46,16 +37,11 @@ public class DataInitializer implements ApplicationRunner {
 
     private final LabelMapper labelMapper;
 
-    private final TaskRepository taskRepository;
-
-    private final TaskMapper taskMapper;
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
         initiateUser();
         initiateTaskStatuses();
         initiateLabels();
-        initiateTask();
     }
 
     public void initiateUser() {
@@ -70,7 +56,7 @@ public class DataInitializer implements ApplicationRunner {
 
     public void initiateTaskStatuses() {
         String[][] data = {{"draft", "Draft"}, {"to_review", "ToReview"}, {"to_be_fixed", "ToBeFixed"},
-                {"to_publish", "ToPublish"}, {"published", "Published"}};
+            {"to_publish", "ToPublish"}, {"published", "Published"}};
         Arrays.stream(data)
                 .map(slugAndName -> {
                     TaskStatusDTO taskStatusData = new TaskStatusDTO();
@@ -94,23 +80,6 @@ public class DataInitializer implements ApplicationRunner {
         anotherData.setName(JsonNullable.of("bug"));
         var anotherLabel = labelMapper.map(anotherData);
         labelRepository.save(anotherLabel);
-
-    }
-
-    public void initiateTask() {
-
-        var newData = new TaskDTO();
-        var user = userRepository.findByEmail("hexlet@example.com").orElseThrow();
-        var status = taskStatusRepository.findBySlug("draft").orElseThrow();
-        var label = labelRepository.findByName("feature").orElseThrow();
-        var labels = new HashSet(Set.of(label));
-        newData.setTitle(JsonNullable.of("test task"));
-        newData.setContent(JsonNullable.of("test content"));
-        newData.setAssigneeId(JsonNullable.of(user.getId()));
-        newData.setLabelIds(taskMapper.map(labels));
-        var newTask = taskMapper.map(newData);
-        newTask.setTaskStatus(status);
-        taskRepository.save(newTask);
 
     }
 

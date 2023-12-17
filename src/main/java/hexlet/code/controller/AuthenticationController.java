@@ -29,8 +29,8 @@ public class AuthenticationController {
 
     @Operation(summary = "Authenticate user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User authenticated"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
+        @ApiResponse(responseCode = "200", description = "User authenticated"),
+        @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PostMapping("/login")
     public String create(
