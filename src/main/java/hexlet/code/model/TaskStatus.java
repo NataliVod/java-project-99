@@ -32,12 +32,12 @@ public class TaskStatus implements BaseEntity {
     private Long id;
 
     @Column(unique = true)
-    @NotBlank
+    @NotBlank(message = "the name must be at least one character long")
     private String name;
 
     @ToString.Include
     @Column(unique = true)
-    @NotBlank
+    @NotBlank(message = "the slug must be at least one character long")
     private String slug;
 
     @CreatedDate

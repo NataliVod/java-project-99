@@ -43,7 +43,7 @@ public class Task implements BaseEntity {
 
     private Integer index;
 
-    @NotBlank
+    @NotBlank(message = "the name must be at least one character long")
     @ToString.Include
     private String name;
 
@@ -51,7 +51,7 @@ public class Task implements BaseEntity {
     @Lob
     private String description;
 
-    @NotNull
+    @NotNull(message = "The field \"status\" is not filled in")
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Include
     private TaskStatus taskStatus;

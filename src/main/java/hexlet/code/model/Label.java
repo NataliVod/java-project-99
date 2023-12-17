@@ -32,8 +32,8 @@ public class Label implements BaseEntity {
 
     @ToString.Include
     @Column(unique = true)
-    @NotNull
-    @Size(min = 3, max = 1000)
+    @NotNull(message = "The field \"name\" is not filled in")
+    @Size(min = 3, max = 1000, message = "size must be between 3 and 1000")
     private String name;
 
     @CreatedDate
