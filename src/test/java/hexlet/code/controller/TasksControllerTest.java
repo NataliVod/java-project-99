@@ -45,6 +45,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @AutoConfigureMockMvc
 public class TasksControllerTest {
 
+   //Добавить тесты на фильтрацию!!!!
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -148,7 +150,7 @@ public class TasksControllerTest {
         data.setTitle(JsonNullable.of("New Name"));
         data.setContent(JsonNullable.of("New content"));
         data.setStatus(JsonNullable.of(taskStatus.getSlug()));
-        data.setLabelIds(JsonNullable.of(List.of()));
+        data.setTaskLabelIds(JsonNullable.of(List.of()));
         data.setAssigneeId(JsonNullable.of(user.getId()));
 
         var request = post("/api/tasks")
@@ -168,7 +170,7 @@ public class TasksControllerTest {
         assertThat(task.getAssignee().getId()).isEqualTo(data.getAssigneeId().get());
         assertThat(task.getLabels())
                 .extracting(Label::getId)
-                .containsExactlyElementsOf(data.getLabelIds().get());
+                .containsExactlyElementsOf(data.getTaskLabelIds().get());
     }
 
     @Transactional
@@ -178,7 +180,7 @@ public class TasksControllerTest {
         data.setTitle(JsonNullable.of("New Name"));
         data.setContent(JsonNullable.of("New content"));
         data.setStatus(JsonNullable.of(taskStatus.getSlug()));
-        data.setLabelIds(JsonNullable.of(List.of()));
+        data.setTaskLabelIds(JsonNullable.of(List.of()));
         data.setAssigneeId(JsonNullable.of(12345L));
 
         var request = post("/api/tasks")
@@ -217,7 +219,7 @@ public class TasksControllerTest {
         assertThat(updatedTask.getAssignee().getId()).isEqualTo(data.getAssigneeId().get());
         assertThat(updatedTask.getLabels())
                 .extracting(Label::getId)
-                .containsExactlyElementsOf(data.getLabelIds().get());
+                .containsExactlyElementsOf(data.getTaskLabelIds().get());
     }
 
     @Transactional

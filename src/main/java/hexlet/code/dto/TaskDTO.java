@@ -34,7 +34,7 @@ public class TaskDTO {
     @NotNull
     private JsonNullable<String> status;
 
-    private JsonNullable<List<Long>> labelIds;
+    private JsonNullable<List<Long>> taskLabelIds;
 
 
     @JsonFormat(pattern = "yyyy-MM-dd")

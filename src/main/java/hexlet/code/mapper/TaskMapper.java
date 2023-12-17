@@ -34,18 +34,18 @@ public abstract class TaskMapper {
     @Mapping(target = "assignee", source = "assigneeId")
     @Mapping(target = "name", source = "title")
     @Mapping(target = "description", source = "content")
-    @Mapping(target = "labels", source = "labelIds")
+    @Mapping(target = "labels", source = "taskLabelIds")
     public abstract Task map(TaskDTO dto);
 
     @Mapping(source = "taskStatus.slug", target = "status")
-    @Mapping(source = "labels", target = "labelIds")
+    @Mapping(source = "labels", target = "taskLabelIds")
     @Mapping(source = "description", target = "content")
     @Mapping(source = "name", target = "title")
     @Mapping(source = "assignee.id", target = "assigneeId")
     public abstract TaskDTO map(Task model);
 
     @Mapping(target = "taskStatus", source = "status")
-    @Mapping(target = "labels", source = "labelIds")
+    @Mapping(target = "labels", source = "taskLabelIds")
     @Mapping(target = "description", source = "content")
     @Mapping(target = "assignee", source = "assigneeId")
     @Mapping(target = "name", source = "title")
@@ -53,12 +53,12 @@ public abstract class TaskMapper {
     @Mapping(target = "createdAt", ignore = true)
     public abstract void update(TaskDTO dto, @MappingTarget Task model);
 
-    public Set<Label> map(JsonNullable<List<Long>> labelIds) {
-        if (labelIds == null) {
+    public Set<Label> map(JsonNullable<List<Long>> taskLabelIds) {
+        if (taskLabelIds == null) {
             return null;
         }
 
-        List<Long> ids = labelIds.get();
+        List<Long> ids = taskLabelIds.get();
         return ids.stream()
                 .map(id -> labelRepository.findById(id).orElse(null))
                 .collect(Collectors.toSet());
@@ -69,11 +69,11 @@ public abstract class TaskMapper {
             return null;
         }
 
-        List<Long> labelIds = labels.stream()
+        List<Long> taskLabelIds = labels.stream()
                 .map(Label::getId)
                 .collect(Collectors.toList());
 
-        return JsonNullable.of(labelIds);
+        return JsonNullable.of(taskLabelIds);
     }
 }
 
