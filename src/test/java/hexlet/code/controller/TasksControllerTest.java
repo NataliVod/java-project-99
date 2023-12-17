@@ -166,6 +166,9 @@ public class TasksControllerTest {
         assertThat(task.getDescription()).isEqualTo(data.getContent().get());
         assertThat(task.getTaskStatus().getSlug()).isEqualTo(data.getStatus().get());
         assertThat(task.getAssignee().getId()).isEqualTo(data.getAssigneeId().get());
+        assertThat(task.getLabels())
+                .extracting(Label::getId)
+                .containsExactlyElementsOf(data.getLabelIds().get());
     }
 
     @Transactional
