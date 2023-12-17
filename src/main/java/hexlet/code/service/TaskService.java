@@ -34,10 +34,17 @@ public class TaskService {
 
     public Task create(TaskDTO taskData) {
         var task = taskMapper.map(taskData);
+
         var slug = taskData.getStatus();
         var status = taskStatusRepository.findBySlug(slug.get())
                 .orElseThrow(() -> new ResourceNotFoundException("Status Not Found: " + slug));
         task.setTaskStatus(status);
+
+        var assigneeId = taskData.getAssigneeId();
+        var assignee = userRepository.findById(assigneeId.get())
+                .orElseThrow(() -> new ResourceNotFoundException("User Not Found: " + assigneeId));
+        task.setAssignee(assignee);
+
         return taskRepository.save(task);
 
     }
