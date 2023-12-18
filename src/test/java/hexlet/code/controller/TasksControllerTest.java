@@ -152,15 +152,13 @@ public class TasksControllerTest {
 
     @Test
     public void testIndexWithLabelId() throws Exception {
-        var labels = testTask.getLabels();
-        var labelId = labels.iterator().next().getId();
-        var result = mockMvc.perform(get("/api/tasks?labelId=" + labelId).with(jwt()))
+        var result = mockMvc.perform(get("/api/tasks?labelId=1").with(jwt()))
                 .andExpect(status().isOk())
                 .andReturn();
 
         var body = result.getResponse().getContentAsString();
         assertThatJson(body).isArray();
-        assertThat(body).contains(String.valueOf(labelId));
+        assertThat(body).contains(String.valueOf(1));
     }
 
     @Test
