@@ -45,7 +45,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @AutoConfigureMockMvc
 public class TasksControllerTest {
 
-   //Добавить тесты на фильтрацию!!!!
+    //Добавить тесты на фильтрацию!!!!
 
     @Autowired
     private MockMvc mockMvc;
@@ -120,6 +120,82 @@ public class TasksControllerTest {
 
         var body = result.getResponse().getContentAsString();
         assertThatJson(body).isArray();
+    }
+
+    @Test
+    public void testIndexWithTitleContains() throws Exception {
+        var partOfName = testTask.getName().substring(1);
+        var result = mockMvc.perform(get("/api/tasks?titleCont=" + partOfName).with(jwt()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("title").asString().containsIgnoringCase(partOfName))
+        );
+    }
+
+    @Test
+    public void testIndexWithAssigneeId() throws Exception {
+        var assigneeId = testTask.getAssignee().getId();
+        var result = mockMvc.perform(get("/api/tasks?assigneeId=" + assigneeId).with(jwt()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("assignee_id").isEqualTo(assigneeId))
+        );
+    }
+
+    @Test
+    public void testIndexWithLabelId() throws Exception {
+        var labels = testTask.getLabels();
+        var labelId = labels.iterator().next().getId();
+        var result = mockMvc.perform(get("/api/tasks?labelId=" + labelId).with(jwt()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray();
+        assertThat(body).contains(String.valueOf(labelId));
+    }
+
+    @Test
+    public void testIndexWithStatus() throws Exception {
+        var slug = testTask.getTaskStatus().getSlug();
+        var result = mockMvc.perform(get("/api/tasks?status=" + slug).with(jwt()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("status").isEqualTo(slug))
+        );
+    }
+
+
+    @Test
+    public void testIndexComplexCondition() throws Exception {
+        var partOfName = testTask.getName().substring(1);
+        var assigneeId = testTask.getAssignee().getId();
+        var slug = testTask.getTaskStatus().getSlug();
+        var request = get("/api/tasks?titleCont=" + partOfName + "&assigneeId=" + assigneeId
+                + "&status=" + slug);
+        var result = mockMvc.perform(request.with(jwt()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("title").asString().containsIgnoringCase(partOfName))
+                        .and(v -> v.node("assignee_id").isEqualTo(assigneeId))
+                        .and(v -> v.node("status").isEqualTo(slug))
+        );
     }
 
     @Test
