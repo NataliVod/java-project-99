@@ -301,7 +301,7 @@ public class TasksControllerTest {
     public void testPartialUpdate() throws Exception {
 
         var data = new TaskDTO();
-        data.setTitle(JsonNullable.of("Another Name"));
+        data.setTitle(JsonNullable.of("AnotherName"));
         data.setContent(JsonNullable.of("Another content"));
         data.setStatus(JsonNullable.of(anotherTaskStatus.getSlug()));
 
