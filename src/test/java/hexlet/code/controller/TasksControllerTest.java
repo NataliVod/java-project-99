@@ -174,7 +174,6 @@ public class TasksControllerTest {
         );
     }
 
-
     @Test
     public void testIndexComplexCondition() throws Exception {
         var partOfName = testTask.getName().substring(1);
@@ -197,8 +196,6 @@ public class TasksControllerTest {
 
     @Test
     public void testShow() throws Exception {
-
-        //   taskRepository.save(testTask);
 
         var request = get("/api/tasks/{id}", testTask.getId()).with(jwt());
         var result = mockMvc.perform(request)
