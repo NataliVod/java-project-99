@@ -246,7 +246,7 @@ public class TasksControllerTest {
                 .containsExactlyElementsOf(data.getTaskLabelIds().get());
     }
 
-   /* @Transactional
+    @Transactional
     @Test
     public void testUpdate() throws Exception {
         var task = Instancio.of(modelGenerator.getTaskModel())
@@ -275,9 +275,8 @@ public class TasksControllerTest {
                 .extracting(Label::getId)
                 .containsExactlyElementsOf(data.getTaskLabelIds().get());
     }
-*/
     @Test
-    public void testUpdate() throws Exception {
+    public void testPartialUpdate() throws Exception {
         var data = new HashMap<String, String>();
         var name = "New Task Name";
         data.put("name", name);

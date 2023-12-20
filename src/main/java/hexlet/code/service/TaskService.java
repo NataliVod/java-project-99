@@ -54,11 +54,14 @@ public class TaskService {
     public Task update(TaskDTO taskData, Long id) {
         var task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task Not Found: " + id));
-        /*var slug = taskData.getStatus().get();
-        var status = taskStatusRepository.findBySlug(slug)
-                .orElseThrow(() -> new ResourceNotFoundException("Status Not Found: " + slug));
-        task.setTaskStatus(status);*/
         taskMapper.update(taskData, task);
+
+        var slug = taskData.getStatus();
+        if (slug != null) {
+            var status = taskStatusRepository.findBySlug(slug.get()).orElse(null);
+            task.setTaskStatus(status);
+        }
+
         return taskRepository.save(task);
     }
 
