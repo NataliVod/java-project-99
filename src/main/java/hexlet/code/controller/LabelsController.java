@@ -32,7 +32,8 @@ public class LabelsController {
     @Operation(summary = "Get specific label by its id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Label found"),
-        @ApiResponse(responseCode = "404", description = "Label with that id not found")
+        @ApiResponse(responseCode = "404", description = "Label with that id not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised")
     })
     @GetMapping("/{id}")
     public ResponseEntity<LabelDTO> getLabelById(
@@ -44,6 +45,7 @@ public class LabelsController {
 
     @Operation(summary = "Get list of all labels")
     @ApiResponse(responseCode = "200", description = "List of all Labels")
+    @ApiResponse(responseCode = "401", description = "Unauthorised")
     @GetMapping
     public ResponseEntity<List<LabelDTO>> getAllLabels() {
         List<LabelDTO> labels = labelService.getAll();
@@ -54,6 +56,7 @@ public class LabelsController {
 
     @Operation(summary = "Create new label")
     @ApiResponse(responseCode = "201", description = "Label created")
+    @ApiResponse(responseCode = "401", description = "Unauthorised")
     @PostMapping
     public ResponseEntity<LabelDTO> createLabel(
             @Parameter(description = "Label data to save")
@@ -65,7 +68,8 @@ public class LabelsController {
     @Operation(summary = "Update label")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Label updated"),
-        @ApiResponse(responseCode = "404", description = "Label with that id not found")
+        @ApiResponse(responseCode = "404", description = "Label with that id not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised")
     })
     @PutMapping("/{id}")
     public ResponseEntity<LabelDTO> updateLabel(
@@ -80,7 +84,8 @@ public class LabelsController {
     @Operation(summary = "Delete label by his id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Label deleted"),
-        @ApiResponse(responseCode = "404", description = "label with that id not found")
+        @ApiResponse(responseCode = "404", description = "label with that id not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLabel(

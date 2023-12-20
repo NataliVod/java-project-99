@@ -31,7 +31,8 @@ public class TaskStatusesController {
     @Operation(summary = "Get specific task status by its id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Task status found"),
-        @ApiResponse(responseCode = "404", description = "Task status with that id not found")
+        @ApiResponse(responseCode = "404", description = "Task status with that id not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised")
     })
     @GetMapping("/{id}")
     public ResponseEntity<TaskStatusDTO> getTaskStatusById(
@@ -43,6 +44,7 @@ public class TaskStatusesController {
 
     @Operation(summary = "Get list of all task statuses")
     @ApiResponse(responseCode = "200", description = "List of all tasks")
+    @ApiResponse(responseCode = "401", description = "Unauthorised")
     @GetMapping
     public ResponseEntity<List<TaskStatusDTO>> getAllTaskStatuses() {
         List<TaskStatusDTO> taskStatusDTOList = taskStatusService.getAll();
@@ -53,6 +55,7 @@ public class TaskStatusesController {
 
     @Operation(summary = "Create new task status")
     @ApiResponse(responseCode = "201", description = "Task status created")
+    @ApiResponse(responseCode = "401", description = "Unauthorised")
     @PostMapping
     public ResponseEntity<TaskStatusDTO> createTaskStatus(
             @Parameter(description = "Task status data to save")
@@ -64,7 +67,8 @@ public class TaskStatusesController {
     @Operation(summary = "Update task status")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Task status updated"),
-        @ApiResponse(responseCode = "404", description = "Task status with that id not found")
+        @ApiResponse(responseCode = "404", description = "Task status with that id not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised")
     })
     @PutMapping("/{id}")
     public ResponseEntity<TaskStatusDTO> updateTaskStatus(
@@ -79,7 +83,8 @@ public class TaskStatusesController {
     @Operation(summary = "Delete task status by his id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Task status deleted"),
-        @ApiResponse(responseCode = "404", description = "Task status with that id not found")
+        @ApiResponse(responseCode = "404", description = "Task status with that id not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTaskStatus(

@@ -38,7 +38,8 @@ public class TasksController {
     @Operation(summary = "Get specific task by its id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Task found"),
-        @ApiResponse(responseCode = "404", description = "Task with that id not found")
+        @ApiResponse(responseCode = "404", description = "Task with that id not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised")
     })
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTaskById(
@@ -50,6 +51,7 @@ public class TasksController {
 
     @Operation(summary = "Get list of all tasks")
     @ApiResponse(responseCode = "200", description = "List of all tasks")
+    @ApiResponse(responseCode = "401", description = "Unauthorised")
     @GetMapping
     public ResponseEntity<List<TaskDTO>> getAllTasks(
             @Parameter(description = "Task data to search")
@@ -62,15 +64,13 @@ public class TasksController {
     }
 
     @Operation(summary = "Create new task")
-    @ApiResponse(responseCode = "201", description = "User task")
+    @ApiResponse(responseCode = "201", description = "Task created")
+    @ApiResponse(responseCode = "401", description = "Unauthorised")
+    @ApiResponse(responseCode = "400", description = "Bad request")
     @PostMapping
     public ResponseEntity<TaskDTO> createTask(
             @Parameter(description = "Task data to save")
             @Valid @RequestBody TaskDTO taskData) {
-        Long assigneeId = taskData.getAssigneeId().get();
-        if (assigneeId != null && userRepository.findById(assigneeId).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
 
         Task task = taskService.create(taskData);
         return ResponseEntity.status(HttpStatus.CREATED).body(taskMapper.map(task));
@@ -79,7 +79,9 @@ public class TasksController {
     @Operation(summary = "Update task")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Task updated"),
-        @ApiResponse(responseCode = "404", description = "Task with that id not found")
+        @ApiResponse(responseCode = "404", description = "Task with that id not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PutMapping("/{id}")
     public ResponseEntity<TaskDTO> updateTask(
@@ -94,7 +96,8 @@ public class TasksController {
     @Operation(summary = "Delete task by his id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Task deleted"),
-        @ApiResponse(responseCode = "404", description = "Task with that id not found")
+        @ApiResponse(responseCode = "404", description = "Task with that id not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(
