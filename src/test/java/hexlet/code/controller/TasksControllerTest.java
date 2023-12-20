@@ -112,7 +112,6 @@ public class TasksControllerTest {
 
     @Test
     public void testIndex() throws Exception {
-        //   taskRepository.save(testTask);
         var result = mockMvc.perform(get("/api/tasks").with(jwt()))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -196,7 +195,6 @@ public class TasksControllerTest {
 
     @Test
     public void testShow() throws Exception {
-
         var request = get("/api/tasks/{id}", testTask.getId()).with(jwt());
         var result = mockMvc.perform(request)
                 .andExpect(status().isOk())
@@ -247,7 +245,6 @@ public class TasksControllerTest {
     @Test
     public void testUpdate() throws Exception {
         var task = Instancio.of(modelGenerator.getTaskModel())
-                //.set(Select.field(Task::getAssignee), null)
                 .create();
         var labels = new HashSet<Label>(Set.of(anotherLabel));
         task.setLabels(labels);
@@ -272,6 +269,7 @@ public class TasksControllerTest {
                 .extracting(Label::getId)
                 .containsExactlyElementsOf(data.getTaskLabelIds().get());
     }
+
     @Test
     public void testPartialUpdate() throws Exception {
         var data = new HashMap<String, String>();
