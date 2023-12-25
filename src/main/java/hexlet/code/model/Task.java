@@ -48,7 +48,6 @@ public class Task implements BaseEntity {
     private String name;
 
     @Column(columnDefinition = "TEXT")
-    @Lob
     private String description;
 
     @NotNull(message = "The field \"status\" is not filled in")
