@@ -1,6 +1,8 @@
 package hexlet.code.service;
 
+import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
+import hexlet.code.utils.UserUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsManager {
 
     private UserRepository userRepository;
+    private UserUtils userUtils;
 
     @Override
     public void createUser(UserDetails userData) {
@@ -44,5 +47,10 @@ public class CustomUserDetailsService implements UserDetailsManager {
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return user;
+    }
+
+    public boolean isCurrentUser(Long userId) {
+        User currentUser = userUtils.getCurrentUser();
+        return currentUser.getId().equals(userId);
     }
 }
