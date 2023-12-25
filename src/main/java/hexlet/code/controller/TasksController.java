@@ -100,9 +100,9 @@ public class TasksController {
         @ApiResponse(responseCode = "401", description = "Unauthorised")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(
-            @Parameter(description = "Id of task to be deleted")
-            @PathVariable Long id) {
+     public ResponseEntity<Void> deleteTask(
+           @Parameter(description = "Id of task to be deleted")
+           @PathVariable Long id) {
         taskService.delete(id);
         return ResponseEntity.noContent().build();
     }

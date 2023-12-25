@@ -4,7 +4,6 @@ import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserDTO;
 import hexlet.code.dto.UserUpdateDTO;
 import hexlet.code.service.UserService;
-import hexlet.code.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -72,6 +71,7 @@ public class UsersController {
         @ApiResponse(responseCode = "404", description = "User with that id not found")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("@userUtils.getCurrentUser().getId() == #id")
     public ResponseEntity<UserDTO> updateUser(
             @Parameter(description = "Id of user to be updated")
             @PathVariable Long id,
@@ -87,6 +87,7 @@ public class UsersController {
         @ApiResponse(responseCode = "404", description = "User with that id not found")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("@userUtils.getCurrentUser().getId() == #id")
     public ResponseEntity<Void> deleteUser(
             @Parameter(description = "Id of user to be deleted")
             @PathVariable Long id) {
